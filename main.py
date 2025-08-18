@@ -10,11 +10,39 @@ TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}"
 
 # --- Predefined questions and answers ---
 qa_dict = {
-    "what is your name?": "I am FarmBot.",
-    "what is the rainfall today?": "Rainfall today is 12mm.",
-    "price of wheat seed": "The price of wheat seed is 500 INR per kg.",
-    "best crop to sow": "Maize is the best crop to sow this season.",
-    "how to contact support?": "You can contact support at support@farmers.com."
+    "I have 2 acres of land, soil pH is 5.5, and the monsoon arrived late this year. Should I grow wheat or maize? And why?": "Given your soil pH of 5.5, which is slightly acidic, and the fact that the monsoon arrived late, maize would be a better choice than wheat. Maize is more tolerant of slightly acidic soils and can handle delayed rainfall better than wheat, which prefers near-neutral soil and a timely monsoon. Choosing maize reduces the risk of poor germination and lower yields under these conditions, making it the safer and more productive option for your 2-acre field.",
+    "There is a heavy rain alert for my district Kanpur next week. What preparations should I make for my paddy crop right now?": "Given a heavy rain alert for Kanpur next week, here’s what you should do to protect your paddy crop:
+
+Check Drainage: Ensure your field has proper drainage channels. Paddy fields can tolerate water, but stagnant water from excessive rain can cause root rot.
+
+Strengthen Bunds: Reinforce the field bunds to prevent flooding and soil erosion.
+
+Secure Young Plants: If seedlings are recently transplanted, consider temporary protective measures or support to prevent them from being uprooted.
+
+Avoid Fertilizer Application: Do not apply nitrogen-rich fertilizers just before heavy rains—they may wash away or damage the crop.
+
+Monitor Disease Risk: Excess water increases fungal and bacterial infections. Be ready to apply appropriate fungicides if needed.
+
+In short: ensure proper drainage, strengthen field bunds, protect young plants, avoid fertilizers, and monitor for diseases.",
+    "I have 100 quintals of onion. Prices are better in Gorakhpur mandi but transport is costly. Where should I sell?": "📈 Current prices:
+Gorakhpur: ₹1,600/qtl
+Local mandi (Kanpur): ₹1,450/qtl
+🚛 Transport cost: ₹200/qtl × 100 qtl = ₹20,000
+Net profit:
+Gorakhpur = ₹1,40,000
+Kanpur = ₹1,45,000
+👉 Better to sell in Kanpur, as transport eats away Gorakhpur advantage",
+    "If potato prices are likely to fall next month, should I sell now or store them in Kanpur?": "📈 Price forecast model (based on 5 years data) predicts:
+Current price in Kanpur: ₹1,200/quintal
+Next month price: ₹950/quintal (likely fall)
+💡 If you have access to cold storage (₹100/quintal/month), storing will still cause losses.
+👉 Recommendation: Sell now to maximize profit.
+",
+    "मेरी जमीन रेतीली है और पानी की कमी रहती है। इस बार कौन सी फसल सबसे अच्छी रहेगी?": "आपकी जमीन का प्रकार → रेतीली मिट्टी और पानी की कमी है।
+ऐसी परिस्थितियों में बाजरा, मूंग, अरहर (पिजन पी) और चना जैसी कम पानी वाली फसलें बेहतर रहती हैं।
+📊 ऐतिहासिक डेटा से दिखता है कि आपके जिले में बाजरा की औसत उपज पिछले 3 साल में 18 क्विंटल/एकड़ रही और उत्पादन लागत भी कम है।
+👉 सुझाव: बाजरा या चना लगाएंगे तो जोखिम कम और मुनाफा स्थिर रहेगा।
+"
 }
 
 # --- Telegram webhook ---
@@ -49,3 +77,4 @@ def home():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
+
