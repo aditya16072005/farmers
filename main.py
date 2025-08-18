@@ -45,6 +45,8 @@ def webhook():
             district = extract_district(user_text)
             query_date = extract_date(user_text)
             api_data = get_rainfall_data(district, query_date)
+            if not api_data:
+                api_data = "Sorry, rainfall data is temporarily unavailable."
             user_text = f"{user_text}\n\nOfficial Data: {api_data}"
 
         # Detect if query is about market price
@@ -53,6 +55,8 @@ def webhook():
             query_date = extract_date(user_text)
             district = extract_district(user_text)  # optional
             api_data = get_market_price(commodity, query_date, district)
+            if not api_data:
+                api_data = "Sorry, market price data is temporarily unavailable."
             user_text = f"{user_text}\n\nOfficial Data: {api_data}"
 
         # Generate response from Gemini
@@ -88,6 +92,7 @@ def home():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
 
 
 
