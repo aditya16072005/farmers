@@ -56,20 +56,21 @@ def webhook():
             user_text = f"{user_text}\n\nOfficial Data: {api_data}"
 
         # Generate response from Gemini
-try:
-    response = model.generate_content(user_text)
-    bot_reply = getattr(response, "output_text", None)
-    if not bot_reply:
-        bot_reply = getattr(response, "text", None)
-    if not bot_reply:
-        bot_reply = "Sorry, could not generate reply."
-except Exception as e:
-    bot_reply = f"Error generating response: {e}"
+        try:
+            response = model.generate_content(user_text)
+            bot_reply = getattr(response, "output_text", None)
+            if not bot_reply:
+                bot_reply = getattr(response, "text", None)
+            if not bot_reply:
+                bot_reply = "Sorry, could not generate reply."
+        except Exception as e:
+            bot_reply = f"Error generating response: {e}"
 
-
+        # Send reply to Telegram
         send_message(chat_id, bot_reply)
 
     return "ok"
+
 
 # --- Send message to Telegram ---
 def send_message(chat_id, text):
@@ -87,5 +88,6 @@ def home():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
 
 
