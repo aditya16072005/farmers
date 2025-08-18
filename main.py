@@ -57,10 +57,16 @@ def webhook():
 
         # Generate response from Gemini
         try:
-            response = model.generate_content(user_text)
-            bot_reply = getattr(response, "output_text", "Sorry, could not generate reply.")
-        except Exception as e:
-            bot_reply = f"Error generating response: {e}"
+    response = model.generate_content(user_text)
+    print("Gemini response:", response)  # DEBUG
+    bot_reply = getattr(response, "output_text", None)
+    if not bot_reply:
+        bot_reply = getattr(response, "text", None)
+    if not bot_reply:
+        bot_reply = "Sorry, could not generate reply."
+except Exception as e:
+    bot_reply = f"Error generating response: {e}"
+
 
         send_message(chat_id, bot_reply)
 
@@ -82,3 +88,4 @@ def home():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
