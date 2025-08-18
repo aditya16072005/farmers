@@ -1,7 +1,7 @@
 # main.py
 from flask import Flask, request
 import requests
-
+import time
 app = Flask(__name__)
 
 # --- Telegram setup ---
@@ -69,6 +69,7 @@ def webhook():
 # --- Send message to Telegram ---
 def send_message(chat_id, text):
     try:
+        time.sleep(5)
         url = f"{TELEGRAM_API_URL}/sendMessage"
         payload = {"chat_id": chat_id, "text": text}
         requests.post(url, json=payload, timeout=10)
@@ -82,3 +83,4 @@ def home():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
+
