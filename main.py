@@ -56,9 +56,8 @@ def webhook():
             user_text = f"{user_text}\n\nOfficial Data: {api_data}"
 
         # Generate response from Gemini
-        try:
+try:
     response = model.generate_content(user_text)
-    print("Gemini response:", response)  # DEBUG
     bot_reply = getattr(response, "output_text", None)
     if not bot_reply:
         bot_reply = getattr(response, "text", None)
@@ -88,4 +87,5 @@ def home():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
 
