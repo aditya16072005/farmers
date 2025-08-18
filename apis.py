@@ -12,9 +12,12 @@ def get_rainfall_data(district, date):
         response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
         data = response.json()
-        # Format response (adjust keys based on API response)
-        return f"Rainfall in {district} on {date}: {data.get('rainfall_mm', 'Data not found')} mm"
-    except Exception as e:
+        # Safely extract rainfall value; adjust key based on API
+        rainfall_mm = data.get("rainfall_mm")
+        if rainfall_mm is None:
+            return f"Rainfall data not available for {district} on {date}."
+        return f"Rainfall in {district} on {date}: {rainfall_mm} mm"
+    except requests.RequestException as e:
         return f"Could not fetch rainfall data: {e}"
 
 def get_market_price(commodity, date, district=None):
@@ -26,6 +29,9 @@ def get_market_price(commodity, date, district=None):
         response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
         data = response.json()
-        return f"Market price of {commodity} on {date}: {data.get('price', 'Data not found')} INR"
-    except Exception as e:
+        price = data.get("price")
+        if price is None:
+            return f"Market price not available for {commodity} on {date}."
+        return f"Market price of {commodity} on {date}: {price} INR"
+    except requests.RequestException as e:
         return f"Could not fetch market price: {e}"
