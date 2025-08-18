@@ -1,6 +1,7 @@
 from flask import Flask, request
 import requests
 import google.generativeai as genai
+from apis import get_rainfall_data, get_market_price
 
 app = Flask(__name__)
 
@@ -37,4 +38,5 @@ def send_message(chat_id, text):
     url = f"{TELEGRAM_API_URL}/sendMessage"
     payload = {"chat_id": chat_id, "text": text}
     requests.post(url, json=payload)
+
 
