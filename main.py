@@ -4,9 +4,11 @@ import requests
 import google.generativeai as genai
 from datetime import date
 from apis import get_rainfall_data, get_market_price
+import pandas as pd
 
 app = Flask(__name__)
-
+crop_prices_df = pd.read_excel("crop_prices.xlsx")  # replace with your file path
+crop_prices = crop_prices_df.set_index("Crop")["Seed_Price"].to_dict()
 # Telegram setup
 TELEGRAM_TOKEN = "8287552481:AAEqRTN5KRtqsy4_M3EZ4CKibIb_-y9pVY0"
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}"
@@ -39,6 +41,7 @@ def webhook():
         chat_id = data["message"]["chat"]["id"]
         user_text = data["message"]["text"].lower()
         api_data = ""
+        
 
         # Detect if query is about rainfall
         if "rainfall" in user_text:
@@ -48,6 +51,15 @@ def webhook():
             if not api_data:
                 api_data = "Sorry, rainfall data is temporarily unavailable."
             user_text = f"{user_text}\n\nOfficial Data: {api_data}"
+        if "seed price" in user_text or "price of seed" in user_text:
+            found = False
+            for crop in crop_prices:
+                if crop.lower() in user_text:
+                    bot_reply = f"Seed price of {crop} is {crop_prices[crop]} INR"
+                    found = True
+                    break
+            if not found:
+                bot_reply = "Sorry, seed price for this crop is not available."
 
         # Detect if query is about market price
         elif "market price" in user_text or "price of" in user_text:
@@ -92,6 +104,7 @@ def home():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
 
 
 
