@@ -8,9 +8,22 @@ import pandas as pd
 
 app = Flask(__name__)
 
-# Load crop prices from Excel
-crop_prices_df = pd.read_excel("crop_prices.xlsx")  # replace with your file path
-crop_prices = crop_prices_df.set_index("Crop")["Seed_Price"].to_dict()
+# Load crop prices from Excel (assuming the sheet is the first one, adjust if needed)
+df = pd.read_excel("crop_prices.xlsx")
+
+# Create unique crop key (combine name + variety if variety exists)
+df["Crop_Full_Name"] = df.apply(
+    lambda row: f"{row['Crop_Name']} {row['Variety_Type']}".strip()
+    if pd.notna(row["Variety_Type"]) else row["Crop_Name"],
+    axis=1
+)
+
+# Build dictionary for lookup (case-insensitive)
+crop_prices = {
+    crop.lower(): price
+    for crop, price in zip(df["Crop_Full_Name"], df["Price_2022_23_Revised_Rs_per_Quintal"])
+}
+
 
 # Telegram setup
 TELEGRAM_TOKEN = "8287552481:AAEqRTN5KRtqsy4_M3EZ4CKibIb_-y9pVY0"
@@ -55,8 +68,8 @@ def webhook():
         elif "seed price" in user_text or "price of seed" in user_text:
             found = False
             for crop in crop_prices:
-                if crop.lower() in user_text:
-                    bot_reply = f"Seed price of {crop} is {crop_prices[crop]} INR"
+                if crop in user_text:  # user_text is already lowercase
+                    bot_reply = f"Seed price of {crop.title()} is {crop_prices[crop]} INR per quintal"
                     found = True
                     break
             if not found:
@@ -105,3 +118,4 @@ def home():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
