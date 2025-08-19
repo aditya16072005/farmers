@@ -65,15 +65,23 @@ def webhook():
             bot_reply = f"Rainfall in {district} on {query_date}: {api_data}"
 
         # Detect if query is about seed price
-        elif "seed price" in user_text or "price of seed" in user_text:
+        elif "seed price" in user_text or "price of seed" in user_text or "price of" in user_text:
             found = False
             for crop in crop_prices:
-                if crop in user_text:  # user_text is already lowercase
+                if crop in user_text or user_text.find(crop) != -1:  # partial match
                     bot_reply = f"Seed price of {crop.title()} is {crop_prices[crop]} INR per quintal"
                     found = True
                     break
             if not found:
+                # try word-level fuzzy match
+                for word in user_text.split():
+                    if word in crop_prices:
+                        bot_reply = f"Seed price of {word.title()} is {crop_prices[word]} INR per quintal"
+                        found = True
+                        break
+            if not found:
                 bot_reply = "Sorry, seed price for this crop is not available."
+
 
         # Detect if query is about market price
         elif "market price" in user_text or "price of" in user_text:
@@ -118,4 +126,5 @@ def home():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
 
